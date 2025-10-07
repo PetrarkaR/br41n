@@ -1,0 +1,30 @@
+import pickle
+import numpy as np
+import torch
+import matplotlib.pyplot as plt
+
+with open('syntheticdata/mi__noise_1000_noise_factor_1_synth_trials.p', 'rb') as f:
+    synth_signal = pickle.load(f)
+
+# Convert to numpy array if needed
+import torch
+
+if isinstance(synth_signal, list) and isinstance(synth_signal[0], torch.Tensor):
+    synth_signal = np.array([x.detach().cpu().numpy() for x in synth_signal])
+elif isinstance(synth_signal, torch.Tensor):
+    synth_signal = synth_signal.detach().cpu().numpy()
+
+# Now you can plot
+trial = 0
+plt.figure(figsize=(12, 6))
+selected_channels = [0, 1, 2, 3, 4, 5, 6, 7]
+print(synth_signal.shape)
+for ch in selected_channels:
+    plt.plot(synth_signal[trial, 0, ch, :], label=f'Channel {ch}')
+plt.xlabel('Time')
+plt.ylabel('Amplitude')
+plt.title('Synthesized Class 1 Signal (Trial 0)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
